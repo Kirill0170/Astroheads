@@ -5,7 +5,19 @@ from sys import exception
 from fs.errors import FileExists
 
 #file to log
-logFileName=os.path.join('..','logs','latest.log')
+logFileName=os.path.join('.','logs','latest.log')
+
+
+current_dir = os.getcwd()
+while True:
+    if os.path.basename(current_dir) == "Astroheads": break
+    else:
+        parent_dir = os.path.dirname(current_dir)
+        if parent_dir == current_dir: print("got root lol")
+        os.chdir(parent_dir)
+
+#file to log
+logFileName=os.path.join('logs','latest.log')
 
 def create_zip_archive(zip_name,file):
     with zipfile.ZipFile(zip_name, 'w') as zipf:
@@ -13,14 +25,14 @@ def create_zip_archive(zip_name,file):
 
 def prepareNewLog():
     #check folder
-    if not os.path.exists(os.path.join('..','logs')):
-        os.makedirs(os.path.join('..','logs'))
+    if not os.path.exists('logs'):
+        os.makedirs(os.path.join('logs'))
     # read first and archive
     if os.path.isfile(logFileName):
         with open(logFileName) as f:
             name=f.readline()
             f.close()
-        create_zip_archive(os.path.join("..",'logs',name+".zip"),logFileName)
+        create_zip_archive(os.path.join('logs',name+".zip"),logFileName)
         os.remove(logFileName)
     # create new
     with open(logFileName,"w") as f:
@@ -61,6 +73,7 @@ def log(module,text,importance=0):
     elif importance==4:
         logtext='['+formatted_time+']'+'['+"FATAL/"+module+']:'+text
         color = RED
+
     if not os.path.exists(logFileName): prepareNewLog()
     writeToFile(logtext)
     print(color+logtext+RESET)
@@ -70,10 +83,10 @@ def crash(exception):
     log("CRASH",traceback.format_exc(),4)
     date = datetime.now()
     formatted_date = date.strftime("%-d-%-m-%Y-%H:%M")
-    crashFileName=os.path.join("..","crash-reports",("crash-"+formatted_date+".log"))
+    crashFileName=os.path.join("crash-reports",("crash-"+formatted_date+".log"))
     #check folder
-    if not os.path.exists(os.path.join('..','crash-reports')):
-        os.makedirs(os.path.join('..','crash-reports'))
+    if not os.path.exists('crash-reports'):
+        os.makedirs('crash-reports')
     with open(crashFileName,"w") as f:
         f.write("--crash report--\n")
         #some info here
