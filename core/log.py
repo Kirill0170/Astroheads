@@ -1,9 +1,5 @@
 from datetime import datetime
 import zipfile, os, traceback
-from sys import exception
-
-from fs.errors import FileExists
-
 #file to log
 logFileName=os.path.join('.','logs','latest.log')
 
@@ -32,7 +28,7 @@ def prepareNewLog():
         with open(logFileName) as f:
             name=f.readline()
             f.close()
-        create_zip_archive(os.path.join('logs',name+".zip"),logFileName)
+        create_zip_archive(str(os.path.join('logs',name))+".zip",logFileName)
         os.remove(logFileName)
     # create new
     with open(logFileName,"w") as f:

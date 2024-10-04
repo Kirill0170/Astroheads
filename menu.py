@@ -1,15 +1,20 @@
 import core.log as log
 import os,sys
+
+from core.textures import loadBlockTextures
+
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
-import pygame
+import pygame,core.textures
 from pygame.color import THECOLORS
 
 
 
 def menu():
     pygame.init()
+    log.prepareNewLog()
     screen = pygame.display.set_mode((800, 600))
     menuState="main"
+    textures=loadBlockTextures()
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
