@@ -82,6 +82,3 @@ def crash(exception):
         f.write("Stack Trace:\n")
         f.write(traceback.format_exc())
         f.write("\n" + "=" * 40 + "\n")
-try:
-    a=10/0
-except Exception as e: crash(e)
