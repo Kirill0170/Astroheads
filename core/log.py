@@ -1,5 +1,8 @@
 from datetime import datetime
-import zipfile, os
+import zipfile, os, traceback
+from sys import exception
+
+from fs.errors import FileExists
 
 #file to log
 logFileName=os.path.join('..','logs','latest.log')
@@ -9,7 +12,7 @@ def create_zip_archive(zip_name,file):
         zipf.write(file,os.path.basename(file))
 
 def prepareNewLog():
-    #checkdir
+    #check folder
     if not os.path.exists(os.path.join('..','logs')):
         os.makedirs(os.path.join('..','logs'))
     # read first and archive
@@ -58,5 +61,27 @@ def log(module,text,importance=0):
     elif importance==4:
         logtext='['+formatted_time+']'+'['+"FATAL/"+module+']:'+text
         color = RED
+    if not os.path.exists(logFileName): prepareNewLog()
     writeToFile(logtext)
     print(color+logtext+RESET)
+def crash(exception):
+    log("CRASH",type(exception).__name__,4)
+    log("CRASH", str(exception), 4)
+    log("CRASH",traceback.format_exc(),4)
+    date = datetime.now()
+    formatted_date = date.strftime("%-d-%-m-%Y-%H:%M")
+    crashFileName=os.path.join("..","crash-reports",("crash-"+formatted_date+".log"))
+    #check folder
+    if not os.path.exists(os.path.join('..','crash-reports')):
+        os.makedirs(os.path.join('..','crash-reports'))
+    with open(crashFileName,"w") as f:
+        f.write("--crash report--\n")
+        #some info here
+        f.write(f"Exception Type: {type(exception).__name__}\n")
+        f.write(f"Exception Message: {str(exception)}\n")
+        f.write("Stack Trace:\n")
+        f.write(traceback.format_exc())
+        f.write("\n" + "=" * 40 + "\n")
+try:
+    a=10/0
+except Exception as e: crash(e)
