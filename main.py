@@ -1,5 +1,3 @@
-from tornado.gen import sleep
-
 import core.log as log
 import os,sys,time
 
