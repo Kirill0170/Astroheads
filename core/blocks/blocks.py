@@ -1,4 +1,5 @@
 import os,importlib,inspect
+from core.log import log
 
 class BlockProperties:
     def __init__(self,miningLevel=1,miningType=0,renderLevel=0,canCollide=True,visible=True,itemOverride=None):
@@ -38,7 +39,7 @@ def loadBlocks(directory): # UNTESTED
         dict: A dictionary where keys are module names and values are lists of class objects.
     """
     classes = {}
-
+    log("BLOCKS","Loading blocks in core/blocks/blocksdir/")
     # List all files in the directory
     for filename in os.listdir(directory):
         if filename.endswith('.py') and filename != '__init__.py':
@@ -54,4 +55,5 @@ def loadBlocks(directory): # UNTESTED
                 classes[name] = obj
     del classes['Block']
     del classes['BlockProperties']
+    log("BLOCKS",f"Loaded {len(classes)} blocks",1)
     return classes

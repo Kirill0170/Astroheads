@@ -1,8 +1,6 @@
 import core.log as log
 import os,sys,time
 
-from core.textures import loadBlockTextures
-
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 import pygame,core.textures
 from pygame.color import THECOLORS
