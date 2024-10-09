@@ -29,7 +29,7 @@ class Block:
         self.sounds=sounds
 
 
-def importBlocks(directory): # UNTESTED
+def loadBlocks(directory): # UNTESTED
     """
     Import all classes from all .py files in the specified directory.
     Args:
@@ -37,18 +37,21 @@ def importBlocks(directory): # UNTESTED
     Returns:
         dict: A dictionary where keys are module names and values are lists of class objects.
     """
-    classes_dict = {}
+    classes = {}
+
     # List all files in the directory
     for filename in os.listdir(directory):
         if filename.endswith('.py') and filename != '__init__.py':
             # Remove the .py extension to get the module name
             module_name = filename[:-3]
-            module_path = os.path.join(directory, module_name)
+            module_path = f"{directory.replace('/', '.')}.{module_name}"
 
             # Import the module
-            module = importlib.import_module(module_path.replace('/', '.'))
+            module = importlib.import_module(module_path)
 
-            # Get all classes defined in the module
-            classes = [cls for cls in inspect.getmembers(module, inspect.isclass)]
-            classes_dict[module_name] = [cls[1] for cls in classes]
-    return classes_dict
+            # Get all classes in the module
+            for name, obj in inspect.getmembers(module, inspect.isclass):
+                classes[name] = obj
+    del classes['Block']
+    del classes['BlockProperties']
+    return classes
