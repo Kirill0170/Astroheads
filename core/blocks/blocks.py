@@ -23,11 +23,12 @@ mining levels:          mining types:
  """
 
 class Block:
-    def __init__(self,name: str,textureName: str,blockProperties=BlockProperties(),sounds=None):
+    def __init__(self,name: str,textureName: str,blockProperties=BlockProperties(),sounds=None,tileEntity=None):
         self.name=name
         self.textureName=textureName
         self.blockProperties=blockProperties
         self.sounds=sounds
+        self.tileEntity=None
 
 
 def loadBlocks(directory): # UNTESTED
